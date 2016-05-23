@@ -6,3 +6,4 @@
  * Time: 17:43
  */
 
+require_once "../source/common.php";
