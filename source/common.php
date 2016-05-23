@@ -66,11 +66,11 @@ function __d($var, $file = '', $split = "\n")
     $var = var_export($var, 1);
     $file = preg_replace('/\W+/', '', $file);
     if ($file) {
-        //写入文件
+        // 写入文件
         file_put_contents('/tmp/' . $file, $var, $split, FILE_APPEND);
     } else {
         if (defined('SYS_ENV_MODE') && SYS_ENV_MODE != 'PRO') {
-            //非线上
+            // 非线上
             echo "<pre>" . $var . "</pre>";
         }
     }
