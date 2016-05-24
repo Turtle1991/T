@@ -76,7 +76,10 @@ function __d($var, $file = '', $split = "\n")
     }
 }
 
-
+$router = new clsRouter();
+$router->parse();
+$router = NULL;
+unset($router);
 
 
 
