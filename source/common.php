@@ -55,7 +55,7 @@ function __autoload($clsName)
     if ($file && file_exists($file)) {
         include_once $file;
     } else {
-
+        __d("类 {$clsName}（{$base}）不存在!");
     }
 }
 
@@ -75,6 +75,8 @@ function __d($var, $file = '', $split = "\n")
         }
     }
 }
+
+
 
 
 
