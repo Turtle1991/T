@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Turtle
@@ -45,7 +46,7 @@ class clsRouter
 
         $len = count($data);
         if ($len == 0) {
-            return $this->_halt(95, 'Invalid url!');
+            return $this->_halt(94, 'Invalid url!');
         }
 
         //强制不缓存
@@ -83,7 +84,7 @@ class clsRouter
         $moduleName = '';
         $base = SYS_MODULE . "/{$this->entry}";
 
-        if (!file_exists($base)) {
+        if (!is_dir($base)) {
             return $this->_halt(99, 'Invalid entry!');
         }
 
@@ -92,35 +93,36 @@ class clsRouter
         empty($this->module) && $this->module = 'index';
         empty($this->method) && $this->method = 'index';
 
+        $base .= '/source';
+        if (!is_dir($base)) {
+            return $this->_halt(98, 'Invalid entry!');
+        }
         $ctlModule = "ctl" . ucfirst($this->module);
         $ctlModuleFile = "{$base}/{$ctlModule}.php";
         if (!is_file($ctlModuleFile)) {
-            return $this->_halt(98, 'Invalid module!');
+            return $this->_halt(97, 'Invalid module!');
         }
 
         $moduleName .= "\\{$ctlModule}";
 
-        if (!is_file($comFile)) {
+        if (is_file($comFile)) {
             require_once $comFile;
         }
         require_once $ctlModuleFile;
 
         if (!class_exists($moduleName, FALSE)) {
-            return $this->_halt(97, 'Invalid module!');
+            return $this->_halt(96, 'Invalid module!');
         }
 
         $control = new $moduleName();
 
-        $methods = [];
-        $methods[] = [
+        $methods = [
             $this->method,
             'func' . $this->method,
             'index',
             'funcIndex'
         ];
-
         $method = NULL;
-
         foreach ($methods as $m) {
             if (method_exists($control, $m)) {
                 $method = $m;
@@ -128,9 +130,10 @@ class clsRouter
             }
         }
         if (empty($method)) {
-            return $this->_halt(96, 'Invalid method!');
+            return $this->_halt(95, 'Invalid method!');
         }
 
+        define('SYS_ENV_ROOT', dirname($base));
         $control->$method();
 
         $control = NULL;
