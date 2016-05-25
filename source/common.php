@@ -5,7 +5,6 @@
  * Date: 2016/5/23
  * Time: 17:44
  */
-
 error_reporting(7);
 ob_start();
 
